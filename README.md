@@ -1,432 +1,260 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Kum & Go / Maverik Merger: An Interactive Story</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Corporate Calm -->
-    <!-- Application Structure Plan: A narrative, single-page scrolling application. It starts with the merger's summary, introduces both companies side-by-side for immediate comparison, uses an interactive timeline to show their parallel histories, provides interactive elements to detail the rebranding's operational shifts, and concludes with a strategic analysis. This structure was chosen over a direct report-to-webpage mapping to create a more engaging, story-driven experience that guides the user from the high-level concept down to the granular details and back out to the strategic implications, which is optimal for comprehension and retention. -->
-    <!-- Visualization & Content Choices: 
-        - Company Comparison: Report Info (Company profiles) -> Goal (Compare) -> Viz (Side-by-side text/stat blocks) -> Interaction (None) -> Justification (Clear, immediate comparison of the two key entities) -> Method (HTML/Tailwind Flexbox).
-        - Historical Growth: Report Info (Key milestones for both) -> Goal (Change/Organize) -> Viz (Interactive horizontal timeline) -> Interaction (Click on a milestone to display details) -> Justification (Condenses a large amount of chronological data into a digestible, explorable format without cluttering the page) -> Method (Custom JS + HTML/Tailwind).
-        - Merger Scale: Report Info (~800 stores combined) -> Goal (Inform/Compare) -> Viz (Donut Chart) -> Interaction (Hover for tooltips) -> Justification (Visually represents the scale and composition of the new combined entity) -> Library (Chart.js).
-        - Rebranding Changes: Report Info (Operational shifts in loyalty/foodservice) -> Goal (Compare) -> Viz (Interactive "before/after" toggle) -> Interaction (Click toggle to switch views) -> Justification (Directly and dynamically illustrates the concrete changes for users, which is more impactful than a static table) -> Method (Custom JS + HTML/Tailwind).
-        - Strategic Analysis: Report Info (Challenges/Opportunities) -> Goal (Organize/Inform) -> Viz (Icon-driven grid layout) -> Interaction (None) -> Justification (Breaks down complex strategic points into easily scannable items) -> Method (HTML/Tailwind Grid). -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F8F7F4;
-            color: #2d3748;
-        }
-        .chart-container {
-            position: relative;
-            margin: auto;
-            height: 300px;
-            max-height: 350px;
-            width: 100%;
-            max-width: 350px;
-        }
-        .nav-link.active {
-            color: #D97706;
-            font-weight: 700;
-        }
-        .timeline-item {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .timeline-item:hover {
-            transform: scale(1.1);
-        }
-        .timeline-item.active .timeline-dot {
-            background-color: #D97706;
-            transform: scale(1.5);
-        }
-        .toggle-bg:after {
-            content: '';
-            @apply absolute top-1 left-1 bg-white border border-gray-300 rounded-full h-7 w-7 transition-transform shadow-sm;
-        }
-        input:checked + .toggle-bg:after {
-            transform: translateX(100%);
-            @apply border-white;
-        }
-        input:checked + .toggle-bg {
-            @apply bg-amber-600;
-        }
-    </style>
-</head>
-<body class="antialiased">
+[vite.config.js](https://github.com/user-attachments/files/22652913/vite.config.js)
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="text-xl font-bold text-gray-800">
-                The C-Store Convergence
-            </div>
-            <div class="hidden md:flex space-x-8">
-                <a href="#intro" class="nav-link text-gray-600 hover:text-amber-700 transition-colors">Introduction</a>
-                <a href="#timeline" class="nav-link text-gray-600 hover:text-amber-700 transition-colors">Timeline</a>
-                <a href="#merger" class="nav-link text-gray-600 hover:text-amber-700 transition-colors">The Merger</a>
-                <a href="#transformation" class="nav-link text-gray-600 hover:text-amber-700 transition-colors">Transformation</a>
-                <a href="#outlook" class="nav-link text-gray-600 hover:text-amber-700 transition-colors">Outlook</a>
-            </div>
-        </nav>
-    </header>
+export default defineConfig({
+  plugins: [react()],
+})
+[index.html](https://github.com/user-attachments/files/22652915/index.html)
+[package.json](https://github.com/user-attachments/files/22652916/package.json)[vite.config.js](https://github.com/user-attachments/files/22652921/vite.config.js)
+[vercel.json](https://github.com/user-attachments/files/22652920/vercel.json)
+[tailwind.config.js](https://github.com/user-attachments/files/22652919/tailwind.config.js)
+[postcss.config.js](https://github.com/user-attachments/files/22652918/postcss.config.js)
 
-    <main>
-        <section id="intro" class="py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900">The Strategic Convergence of <span class="text-red-600">Kum & Go</span> and <span class="text-sky-700">Maverik</span></h1>
-                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-600">An interactive analysis of the 2023 acquisition that reshaped the convenience retail landscape, uniting a Midwestern pioneer with a Western adventure brand. Explore their histories, the strategic rationale behind the merger, and the future of the combined entity.</p>
-            </div>
-        </section>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#DC2626"/>
+      <stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g font-family="Inter, ui-sans-serif, system-ui" fill="#fff">
+    <text x="60" y="210" font-size="72" font-weight="800">Stehouwer Marketing Firm</text>
+    <text x="60" y="290" font-size="44" opacity="0.95">3-Month Onboarding & Growth Sprint</text>
+    <text x="60" y="360" font-size="28" opacity="0.85">Foundation → Implementation → Optimization</text>
+    <text x="60" y="420" font-size="24" opacity="0.9">Red · Purple · Green · Black · Grey</text>
+  </g>
+</svg>
 
-        <section class="py-16 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900">Two Titans of Convenience</h2>
-                    <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">Before their landmark merger, Kum & Go and Maverik forged distinct identities, each dominating their respective regions with unique strategies and customer experiences.</p>
-                </div>
+User-agent: *
+Allow: /
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                    <div class="bg-gray-50 p-8 rounded-xl shadow-sm border border-gray-200">
-                        <h3 class="text-2xl font-bold text-red-600 mb-4">Kum & Go</h3>
-                        <p class="text-gray-600 mb-6">A Midwestern legacy founded in 1959, Kum & Go pioneered the "station store" concept. It built its brand on community focus, strategic growth, and a notable commitment to sustainability, becoming the only LEED-certified convenience store globally by 2010.</p>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <p><span class="font-bold">Founded:</span> 1959, Hampton, IA</p>
-                            <p><span class="font-bold">Core Identity:</span> Midwestern Pioneer, Community Focus</p>
-                            <p><span class="font-bold">Key Differentiator:</span> Early merchandise integration, LEED certification, E85 fuel promotion.</p>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-xl shadow-sm border border-gray-200">
-                        <h3 class="text-2xl font-bold text-sky-700 mb-4">Maverik</h3>
-                        <p class="text-gray-600 mb-6">Born from an entrepreneurial spirit in 1928, Maverik cultivated an "Adventure's First Stop" identity across the West. It distinguished itself with an immersive store experience, gourmet "BonFire" food, and a sophisticated, tiered loyalty program.</p>
-                         <div class="space-y-3 text-sm text-gray-700">
-                            <p><span class="font-bold">Founded:</span> 1928, Afton, WY</p>
-                            <p><span class="font-bold">Core Identity:</span> Adventure's First Stop, Outdoor Lifestyle</p>
-                            <p><span class="font-bold">Key Differentiator:</span> "BonFire" foodservice, "Adventure Club" loyalty program, unique store aesthetics.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+Sitemap: https://YOURDOMAIN/sitemap.xml
 
-        <section id="timeline" class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900">A Tale of Parallel Growth</h2>
-                    <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">Trace the key milestones of both companies on a shared timeline. Click on any event to see its strategic significance and understand how these two paths eventually converged.</p>
-                </div>
-                
-                <div class="relative w-full overflow-x-auto pb-8">
-                     <!-- The inner div's width is adjusted to be more flexible for embedding -->
-                    <div class="relative min-w-[1200px] w-full h-48">
-                        <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-300"></div>
-                        <div id="timeline-events" class="absolute top-0 left-0 w-full h-full flex justify-between items-center">
-                        </div>
-                    </div>
-                </div>
+{
+  "name": "Stehouwer Marketing Firm",
+  "short_name": "Stehouwer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0A0A0A",import React from 'react'
 
-                <div id="timeline-details" class="mt-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200 min-h-[180px] transition-all duration-300">
-                    <h4 id="details-year" class="text-xl font-bold text-amber-700 mb-2"></h4>
-                    <h5 id="details-title" class="text-lg font-semibold text-gray-800 mb-2"></h5>
-                    <p id="details-description" class="text-gray-600"></p>
-                </div>
-            </div>
-        </section>
-        
-        <section id="merger" class="py-20 bg-white">
-             <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900">The Acquisition: A Strategic Convergence</h2>
-                    <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">In 2023, a landmark deal was struck. Maverik's parent company, FJ Management, acquired Kum & Go, creating a new convenience retail giant with a formidable footprint across 20 states.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Creating a National Powerhouse</h3>
-                        <p class="text-gray-600 mb-6">The acquisition was more than a simple expansion; it was a strategic move rooted in a perceived "great fit" between the companies' cultures and business models. The goal was to leverage combined strengths, creating value that surpassed the sum of their individual parts and establishing the 12th-largest convenience store chain in the U.S.</p>
-                        <div class="grid grid-cols-2 gap-4 text-center">
-                            <div class="bg-gray-100 p-4 rounded-lg">
-                                <span class="text-3xl font-bold text-amber-700">~800</span>
-                                <span class="block text-sm text-gray-600">Combined Stores</span>
-                            </div>
-                            <div class="bg-gray-100 p-4 rounded-lg">
-                                <span class="text-3xl font-bold text-amber-700">20</span>
-                                <span class="block text-sm text-gray-600">States</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                         <div class="chart-container">
-                            <canvas id="mergerChart"></canvas>
-                        </div>
-                        <p class="text-center text-sm text-gray-500 mt-2">Pre-acquisition store count contribution</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+const GA_TRACK = (action, params = {}) => {
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    window.gtag('event', action, params);
+  }
+};
 
-        <section id="transformation" class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900">Transformation in Action</h2>
-                    <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">The rebranding is more than a name change. It's a complete operational overhaul designed to standardize the customer experience. Use the toggle to see the key shifts from the Kum & Go model to the new Maverik standard.</p>
-                </div>
-                
-                <div class="flex justify-center items-center mb-8 space-x-4">
-                    <span id="label-kum-go" class="font-bold text-red-600">Kum & Go</span>
-                     <label for="brandToggle" class="flex items-center cursor-pointer">
-                        <div class="relative">
-                            <input id="brandToggle" type="checkbox" class="sr-only" />
-                            <div class="block bg-gray-200 w-16 h-9 rounded-full toggle-bg"></div>
-                        </div>
-                    </label>
-                    <span id="label-maverik" class="font-semibold text-gray-500">Maverik</span>
-                </div>
+const FORMSPREE_ID = ""; // Add your Formspree ID when ready
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div id="loyalty-card">
-                    </div>
-                    <div id="food-card">
-                    </div>
-                </div>
-            </div>
-        </section>
+function mailtoFromForm(form) {
+  const data = new FormData(form);
+  const name = encodeURIComponent(String(data.get('name') || ''));
+  const email = encodeURIComponent(String(data.get('email') || ''));
+  const company = encodeURIComponent(String(data.get('company') || ''));
+  const message = encodeURIComponent(String(data.get('message') || ''));
+  const subject = encodeURIComponent('Kickoff Request — Stehouwer Marketing Firm');
+  const body = encodeURIComponent(
+    `Name: ${decodeURIComponent(name)}\nEmail: ${decodeURIComponent(email)}\nCompany: ${decodeURIComponent(company)}\nGoals (90 days):\n${decodeURIComponent(message)}`
+  );
+  window.location.href = `mailto:stehouwerjulie@gmail.com?subject=${subject}&body=${body}`;
+}
 
-        <section id="outlook" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900">Challenges & Opportunities</h2>
-                     <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">The integration presents a complex strategic landscape, balancing significant challenges with transformative opportunities that could redefine the company's future and the industry at large.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="text-3xl mr-3 text-red-500">&#9888;</span>
-                            Challenges
-                        </h3>
-                        <ul class="space-y-3 list-inside">
-                            <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">&#10148;</span><span>Integrating distinct corporate cultures (Midwest legacy vs. Western adventure).</span></li>
-                            <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">&#10148;</span><span>Managing customer expectations after discontinuing Kum & Go's loyalty program.</span></li>
-                            <li class="flex items-start"><span class="text-red-500 mr-2 mt-1">&#10148;</span><span>Navigating the logistical complexity of rebranding and renovating hundreds of stores.</span></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <span class="text-3xl mr-3 text-green-500">&#10024;</span>
-                            Opportunities
-                        </h3>
-                        <ul class="space-y-3 list-inside">
-                             <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">&#10148;</span><span>Significantly expanded geographic reach across a 20-state footprint.</span></li>
-                            <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">&#10148;</span><span>Driving higher profitability by rolling out Maverik's high-margin foodservice and loyalty programs.</span></li>
-                            <li class="flex items-start"><span class="text-green-500 mr-2 mt-1">&#10148;</span><span>Achieving major economies of scale in supply chain, marketing, and procurement.</span></li>
-                        </ul>
-                    </div>
-                </div>
-                 <div class="mt-16 pt-8 border-t border-gray-200">
-                    <h3 class="text-2xl font-bold text-center text-gray-900">Future Outlook</h3>
-                    <p class="mt-4 max-w-4xl mx-auto text-center text-gray-600">The Kum & Go/Maverik merger exemplifies the consolidation trend in convenience retail. By creating a larger, more formidable player focused on a differentiated, "elevated experience," the combined entity is poised to shift competitive dynamics, potentially pressuring smaller players to innovate. The success of this integration will serve as a critical case study for brand unification and strategic value creation in the retail sector for years to come.</p>
-                </div>
-            </div>
-        </section>
+function Tag({ children, className = "" }) {
+  return <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${className}`}>{children}</span>
+}
 
-    </main>
-    
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 Strategic Analysis. All data sourced from the "Comprehensive Audio Overview" report.</p>
-            <p class="text-sm text-gray-400 mt-1">This is an interactive visualization for educational purposes.</p>
+function Stat({ kpi, label, colorClass = "" }) {
+  return (
+    <div className="rounded-2xl border p-6 shadow-sm">
+      <div className={`text-3xl font-bold ${colorClass}`}>{kpi}</div>
+      <div className="text-sm text-gray-600">{label}</div>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header */}
+      <header className="sticky top-0 z-20 border-b bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 rounded bg-gradient-to-br from-brand-red to-brand-purple" />
+            <span className="font-semibold">Stehouwer Marketing Firm</span>
+          </div>
+          <nav className="hidden gap-6 md:flex">
+            <a href="#plan" className="text-sm hover:underline">Plan</a>
+            <a href="#timeline" className="text-sm hover:underline">Timeline</a>
+            <a href="#pricing" className="text-sm hover:underline">Pricing</a>
+            <a href="#contact" className="text-sm hover:underline">Contact</a>
+          </nav>
+          <a href="#contact" className="rounded-xl border px-4 py-2 text-sm font-medium">Start</a>
         </div>
-    </footer>
+      </header>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            
-            const timelineData = [
-                { year: 1928, company: 'Maverik', title: 'Maverik Founded', description: 'Ruell Call starts the business in Afton, WY with two barrels of fuel, establishing its entrepreneurial roots.', position: 5 },
-                { year: 1959, company: 'Kum & Go', title: 'Kum & Go Founded', description: 'William A. Krause and Tony S. Gentle establish the Hampton Oil Company in Hampton, IA.', position: 15 },
-                { year: 1963, company: 'Kum & Go', title: 'Pioneering "Station Stores"', description: 'The company integrates merchandise sales with gasoline, a key innovation for the modern convenience store model.', position: 20 },
-                { year: 1975, company: 'Kum & Go', title: 'Adoption of "Kum & Go" Name', description: 'A memorable brand identity is created, incorporating the founders\' initials (Krause and Gentle).', position: 28 },
-                { year: 1988, company: 'Kum & Go', title: 'HQ Relocated', description: 'Corporate headquarters moves to West Des Moines, IA, signifying major organizational growth.', position: 38 },
-                { year: 2008, company: 'Kum & Go', title: 'Strategic Store Format Pivot', description: 'Divested 40+ smaller stores to focus on larger, more profitable 3,600-5,000 sq ft formats.', position: 55 },
-                { year: 2010, company: 'Kum & Go', title: 'LEED Certification Leadership', description: 'Became the only C-store in the world certified under the LEED Volume Program, highlighting a commitment to sustainability.', position: 60 },
-                { year: 2015, company: 'Maverik', title: '"Adventure Club" Launch', description: 'Launched a sophisticated, tiered loyalty program to drive customer engagement and data-driven marketing.', position: 70, note: 'Approximate year for context' },
-                { year: 2023, company: 'Merger', title: 'Acquisition Finalized', description: 'FJ Management, Maverik\'s parent, finalizes the acquisition of Kum & Go, creating the 12th-largest C-store chain in the U.S.', position: 88 },
-                { year: 2025, company: 'Merger', title: 'Rebranding Complete (Projected)', description: 'All Kum & Go stores are projected to be converted to the Maverik brand, unifying the customer experience.', position: 98 }
-            ];
+      {/* Hero */}
+      <section>
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-16 md:grid-cols-2">
+          <div>
+            <Tag>90-Day Engagement</Tag>
+            <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
+              From Audit → Launch → ROI: a <span className="underline">3‑Month Growth Sprint</span>
+            </h1>
+            <p className="mt-4 text-gray-700">
+              We set foundations in Month 1, launch and stabilize in Month 2, then optimize & prove ROI in Month 3.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Tag className="border-gray-300 text-gray-700 bg-white">GA4 + Pixels</Tag>
+              <Tag className="border-brand-red text-brand-red bg-red-50">Google / Meta</Tag>
+              <Tag className="border-brand-purple text-brand-purple bg-purple-50">Technical SEO</Tag>
+              <Tag className="border-brand-green text-brand-green bg-green-50">A/B Testing</Tag>
+            </div>
+            <div className="mt-8 flex gap-3">
+              <a href="#contact" className="rounded-2xl bg-black px-5 py-3 text-white" onClick={() => GA_TRACK('cta_click', { label: 'book_kickoff' })}>Book the Kickoff</a>
+              <a href="#plan" className="rounded-2xl border border-brand-purple px-5 py-3 text-brand-purple hover:bg-purple-50" onClick={() => GA_TRACK('cta_click', { label: 'see_plan' })}>See the Plan</a>
+            </div>
+          </div>
 
-            const timelineEventsContainer = document.getElementById('timeline-events');
-            const detailsYear = document.getElementById('details-year');
-            const detailsTitle = document.getElementById('details-title');
-            const detailsDescription = document.getElementById('details-description');
-            
-            timelineData.forEach((event, index) => {
-                const item = document.createElement('div');
-                item.className = `timeline-item absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center`;
-                item.style.left = `${event.position}%`;
+          <div className="rounded-3xl border p-6 shadow-lg">
+            <div className="grid grid-cols-3 gap-4">
+              <Stat kpi="Clean" label="Tracking & Baselines" colorClass="text-brand-gray" />
+              <Stat kpi="Live" label="Campaigns + Content" colorClass="text-brand-red" />
+              <Stat kpi="> ROI" label="Optimization Focus" colorClass="text-brand-green" />
+            </div>
+            <div className="mt-6 rounded-xl bg-gray-50 p-4 text-sm">
+              <div className="font-semibold">Deliverables</div>
+              <ul className="mt-2 list-disc pl-5 text-gray-700">
+                <li>Baseline & Strategy Report (M1)</li>
+                <li>Mid‑Sprint Performance Review (M2)</li>
+                <li>3‑Month Growth Report + 90‑Day Roadmap (M3)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                const dot = document.createElement('div');
-                dot.className = 'timeline-dot w-4 h-4 rounded-full border-2 border-white shadow-md transition-all';
-                dot.style.backgroundColor = event.company === 'Kum & Go' ? '#DC2626' : (event.company === 'Maverik' ? '#0369A1' : '#D97706');
-                
-                const label = document.createElement('span');
-                label.className = `mt-4 text-xs font-semibold ${index % 2 === 0 ? '-top-8' : 'top-8'} absolute`;
-                label.textContent = event.year;
-                
-                item.appendChild(dot);
-                item.appendChild(label);
-                item.dataset.index = index;
-                timelineEventsContainer.appendChild(item);
-            });
+      {/* Plan Overview */}
+      <section id="plan" className="border-t bg-gray-50">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="text-2xl font-bold">The Plan</h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border bg-white p-6 border-l-4 border-l-brand-red">
+              <div className="text-sm font-semibold text-gray-500">Month 1</div>
+              <h3 className="mt-1 text-xl font-bold">Foundation & Discovery</h3>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>Kickoff & KPI alignment</li>
+                <li>Audits: SEO, analytics, paid, social, competitive</li>
+                <li>GA4, GTM, pixels, conversions</li>
+                <li>Strategy + content calendar v1</li>
+                <li className="font-medium">Deliverable: Baseline & Strategy Report</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border bg-white p-6 border-l-4 border-l-brand-purple">
+              <div className="text-sm font-semibold text-gray-500">Month 2</div>
+              <h3 className="mt-1 text-xl font-bold">Implementation & Data</h3>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>Launch ads (Google/Meta)</li>
+                <li>Content execution + engagement</li>
+                <li>Active management & creative swaps</li>
+                <li>SEO fixes from Month 1</li>
+                <li className="font-medium">Deliverable: Mid‑Sprint Review</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border bg-white p-6 border-l-4 border-l-brand-green">
+              <div className="text-sm font-semibold text-gray-500">Month 3</div>
+              <h3 className="mt-1 text-xl font-bold">Optimization & Planning</h3>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>Scale winners, cut waste</li>
+                <li>A/B testing: creative, landing, audience</li>
+                <li>ROI analysis vs. KPIs</li>
+                <li>Strategy review & gap analysis</li>
+                <li className="font-medium">Deliverable: Growth Report + Roadmap</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            function updateDetails(index) {
-                const event = timelineData[index];
-                document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
-                document.querySelector(`.timeline-item[data-index='${index}']`).classList.add('active');
-
-                detailsYear.textContent = event.year + (event.note ? ` (${event.note})` : '');
-                detailsTitle.textContent = event.title;
-                detailsDescription.textContent = event.description;
+      {/* Contact */}
+      <section id="contact">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="text-2xl font-bold">Book Your Kickoff</h2>
+          <p className="mt-2 text-gray-700">Tell us about your goals and we’ll confirm the sprint plan.</p>
+          <form className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={async (e) => {
+            e.preventDefault();
+            const form = e.currentTarget;
+            const hasFormspree = Boolean(FORMSPREE_ID && FORMSPREE_ID.trim());
+            if (!hasFormspree) {
+              GA_TRACK('lead_submitted', { form: 'kickoff', transport: 'mailto' });
+              mailtoFromForm(form);
+              return;
             }
-
-            timelineEventsContainer.addEventListener('click', (e) => {
-                const targetItem = e.target.closest('.timeline-item');
-                if (targetItem) {
-                    updateDetails(targetItem.dataset.index);
-                }
-            });
-
-            updateDetails(0);
-
-            const mergerCtx = document.getElementById('mergerChart').getContext('2d');
-            new Chart(mergerCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Maverik (Pre-Acquisition)', 'Kum & Go (Pre-Acquisition)'],
-                    datasets: [{
-                        label: 'Store Count',
-                        data: [400, 400],
-                        backgroundColor: ['#0369A1', '#DC2626'],
-                        borderColor: ['#F8F7F4'],
-                        borderWidth: 4,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#4b5563',
-                                font: {
-                                    family: "'Inter', sans-serif",
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                             titleFont: {
-                                family: "'Inter', sans-serif",
-                                weight: 'bold',
-                                size: 14,
-                            },
-                            bodyFont: {
-                                family: "'Inter', sans-serif",
-                                size: 12,
-                            },
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: Approx. ${context.raw} stores`;
-                                }
-                            }
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-            
-            const brandToggle = document.getElementById('brandToggle');
-            const labelKumGo = document.getElementById('label-kum-go');
-            const labelMaverik = document.getElementById('label-maverik');
-            const loyaltyCard = document.getElementById('loyalty-card');
-            const foodCard = document.getElementById('food-card');
-
-            const kumGoContent = {
-                loyalty: `
-                    <div class="bg-red-50 p-6 rounded-xl border border-red-200 h-full">
-                        <h4 class="text-xl font-bold text-red-700 mb-3">Loyalty Program</h4>
-                        <p class="font-semibold text-lg text-gray-800 mb-2">&Go Rewards</p>
-                        <p class="text-gray-600">A points-based system where members earned rewards on purchases. A key feature was that points would eventually expire. This program is now discontinued.</p>
-                    </div>`,
-                food: `
-                    <div class="bg-red-50 p-6 rounded-xl border border-red-200 h-full">
-                        <h4 class="text-xl font-bold text-red-700 mb-3">Foodservice</h4>
-                        <p class="font-semibold text-lg text-gray-800 mb-2">Made-to-Order Kitchen</p>
-                        <p class="text-gray-600">Focused on fresh, made-to-order sandwiches, pizzas, and bowls, with a strong emphasis on mobile ordering for convenience. This system is being phased out.</p>
-                    </div>`
-            };
-            
-             const maverikContent = {
-                loyalty: `
-                    <div class="bg-sky-50 p-6 rounded-xl border border-sky-200 h-full">
-                        <h4 class="text-xl font-bold text-sky-800 mb-3">Loyalty Program</h4>
-                        <p class="font-semibold text-lg text-gray-800 mb-2">Adventure Club & Nitro Card</p>
-                        <p class="text-gray-600">A tiered system offering fuel discounts and "Trail Points." The premium Nitro card, linked to a bank account, provides deeper savings, driving strong retention.</p>
-                    </div>`,
-                food: `
-                    <div class="bg-sky-50 p-6 rounded-xl border border-sky-200 h-full">
-                        <h4 class="text-xl font-bold text-sky-800 mb-3">Foodservice</h4>
-                        <p class="font-semibold text-lg text-gray-800 mb-2">BonFire Food</p>
-                        <p class="text-gray-600">Emphasizes freshly prepared, gourmet-style grab-and-go options like specialty burritos, sandwiches, and pizzas, creating a consistent, elevated food experience.</p>
-                    </div>`
-            };
-            
-            function updateTransformationView(isMaverik) {
-                if(isMaverik) {
-                    labelMaverik.className = "font-bold text-sky-700";
-                    labelKumGo.className = "font-semibold text-gray-500";
-                    loyaltyCard.innerHTML = maverikContent.loyalty;
-                    foodCard.innerHTML = maverikContent.food;
-                } else {
-                    labelKumGo.className = "font-bold text-red-600";
-                    labelMaverik.className = "font-semibold text-gray-500";
-                    loyaltyCard.innerHTML = kumGoContent.loyalty;
-                    foodCard.innerHTML = kumGoContent.food;
-                }
+            const data = new FormData(form);
+            try {
+              const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+              GA_TRACK('lead_submitted', { form: 'kickoff', ok: res.ok, transport: 'formspree' });
+              alert(res.ok ? "Thanks! We'll be in touch." : "Submission failed. Please try again.");
+              if (res.ok) form.reset();
+            } catch (err) {
+              GA_TRACK('lead_error', { form: 'kickoff' });
+              alert('Network error. Please try again.');
             }
-            
-            brandToggle.addEventListener('change', (e) => {
-                updateTransformationView(e.target.checked);
-            });
-            
-            updateTransformationView(false);
+          }}>
+            <input name="name" required className="rounded-xl border px-4 py-3" placeholder="Full Name" />
+            <input type="email" name="email" required className="rounded-xl border px-4 py-3" placeholder="Email" />
+            <input name="company" className="rounded-xl border px-4 py-3 md:col-span-2" placeholder="Company / Website" />
+            <textarea name="message" className="rounded-xl border px-4 py-3 md:col-span-2" rows={4} placeholder="Your goals for the next 90 days" />
+            <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
+            <button type="submit" className="w-full rounded-2xl bg-black px-5 py-3 text-white md:w-auto" onClick={() => GA_TRACK('cta_click', { label: 'request_kickoff' })}>
+              Request Kickoff
+            </button>
+          </form>
+          <p className="mt-3 text-xs text-gray-500">* No Formspree ID yet — falling back to email compose. Add your ID to enable in-app submissions.</p>
+        </div>
+      </section>
 
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
+      {/* Footer */}
+      <footer className="border-t">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-8 text-sm text-gray-600">
+          <span>© {new Date().getFullYear()} Stehouwer Marketing Firm</span>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:underline">Privacy</a>
+            <a href="#" className="hover:underline">Terms</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
 
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 60) {
-                        current = section.getAttribute('id');
-                    }
-                });
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+html, body, #root { height: 100%; }
+
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+createRoot(document.getElementById('root')).render(<App />)
+
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32 48x48 64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://YOURDOMAIN/</loc><priority>1.0</priority></url>
+  <url><loc>https://YOURDOMAIN/#plan</loc></url>
+  <url><loc>https://YOURDOMAIN/#timeline</loc></url>
+  <url><loc>https://YOURDOMAIN/#pricing</loc></url>
+  <url><loc>https://YOURDOMAIN/#contact</loc></url>
+</urlset>
